@@ -98,4 +98,34 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
+    // Testimonial Auto-Scroll
+    const scroller = document.querySelector('.testimonial-scroller');
+    if (scroller) {
+        let isPaused = false;
+        
+        // Pause on hover
+        scroller.addEventListener('mouseenter', () => isPaused = true);
+        scroller.addEventListener('mouseleave', () => isPaused = false);
+
+        // Retrieve card width dynamically
+        const getScrollStep = () => {
+            const card = scroller.querySelector('.testimonial-card');
+            return card ? card.offsetWidth + 32 : 0; // card width + gap
+        };
+
+        setInterval(() => {
+            if (!isPaused) {
+                const scrollStep = getScrollStep();
+                if (scrollStep > 0) {
+                    const maxScroll = scroller.scrollWidth - scroller.clientWidth;
+                    if (scroller.scrollLeft >= maxScroll - 10) { // Tolerance
+                         // Reset to start smoothly
+                         scroller.scrollTo({ left: 0, behavior: 'smooth' });
+                    } else {
+                        scroller.scrollBy({ left: scrollStep, behavior: 'smooth' });
+                    }
+                }
+            }
+        }, 4000); // 4 seconds interval
+    }
 });
